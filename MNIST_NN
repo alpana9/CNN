@@ -1,0 +1,73 @@
+from keras.datasets import mnist
+from tensorflow.keras.models import Sequential
+
+from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPool2D
+
+from keras.utils import np_utils
+
+# Flattening the images from the 28x28 pixels to 1D 787 pixels
+X_train = X_train.reshape(60000, 784)
+X_test = X_test.reshape(10000, 784)
+X_train = X_train.astype('float32')
+X_test = X_test.astype('float32')
+
+# normalizing the data to help with the training
+X_train /= 255
+X_test /= 255
+
+# one-hot encoding using keras' numpy-related utilities
+n_classes = 10
+print("Shape before one-hot encoding: ", y_train.shape)
+Y_train = np_utils.to_categorical(y_train, n_classes)
+Y_test = np_utils.to_categorical(y_test, n_classes)
+print("Shape after one-hot encoding: ", Y_train.shape)
+Shape before one-hot encoding:  (60000,)
+Shape after one-hot encoding:  (60000, 10)
+
+# building a linear stack of layers with the sequential model
+model = Sequential()
+# hidden layer
+model.add(Dense(100, input_shape=(784,), activation='relu'))
+# output layer
+model.add(Dense(10, activation='softmax'))
+
+# looking at the model summary
+model.summary()
+# compiling the sequential model
+model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
+# training the model for 10 epochs
+model.fit(X_train, Y_train, batch_size=128, epochs=10, validation_data=(X_test, Y_test))
+Model: "sequential_1"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_2 (Dense)              (None, 100)               78500     
+_________________________________________________________________
+dense_3 (Dense)              (None, 10)                1010      
+=================================================================
+Total params: 79,510
+Trainable params: 79,510
+Non-trainable params: 0
+_________________________________________________________________
+Train on 60000 samples, validate on 10000 samples
+Epoch 1/10
+60000/60000 [==============================] - 1s 24us/sample - loss: 1.8779 - accuracy: 0.5467 - val_loss: 1.2979 - val_accuracy: 0.7108
+Epoch 2/10
+60000/60000 [==============================] - 1s 17us/sample - loss: 0.9929 - accuracy: 0.7849 - val_loss: 0.7624 - val_accuracy: 0.8287
+Epoch 3/10
+60000/60000 [==============================] - 1s 17us/sample - loss: 0.6613 - accuracy: 0.8440 - val_loss: 0.5598 - val_accuracy: 0.8634
+Epoch 4/10
+60000/60000 [==============================] - 1s 17us/sample - loss: 0.5200 - accuracy: 0.8694 - val_loss: 0.4619 - val_accuracy: 0.8825
+Epoch 5/10
+60000/60000 [==============================] - 1s 18us/sample - loss: 0.4460 - accuracy: 0.8829 - val_loss: 0.4085 - val_accuracy: 0.8918
+Epoch 6/10
+60000/60000 [==============================] - 1s 17us/sample - loss: 0.4023 - accuracy: 0.8917 - val_loss: 0.3739 - val_accuracy: 0.8995
+Epoch 7/10
+60000/60000 [==============================] - 1s 17us/sample - loss: 0.3735 - accuracy: 0.8973 - val_loss: 0.3493 - val_accuracy: 0.9036
+Epoch 8/10
+60000/60000 [==============================] - 1s 18us/sample - loss: 0.3533 - accuracy: 0.9012 - val_loss: 0.3342 - val_accuracy: 0.9072
+Epoch 9/10
+60000/60000 [==============================] - 1s 17us/sample - loss: 0.3380 - accuracy: 0.9050 - val_loss: 0.3217 - val_accuracy: 0.9098
+Epoch 10/10
+60000/60000 [==============================] - 1s 17us/sample - loss: 0.3259 - accuracy: 0.9074 - val_loss: 0.3113 - val_accuracy: 0.9108
+Out[41]: <tensorflow.python.keras.callbacks.History at 0x15fdd8cd390>
