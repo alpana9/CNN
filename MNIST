@@ -41,4 +41,26 @@ model.add(Dense(10, activation='softmax'))
 model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
 
 # training the model for 10 epochs
-model.fit(X_train, Y_train, batch_size=128, epochs=10, validation_data=(X_test, Y_test))
+model.fit(X_train, Y_train,batch_size=128, epochs=10, validation_data=(X_test, Y_test))
+Train on 60000 samples, validate on 10000 samples
+Epoch 1/10
+60000/60000 [==============================] - 28s 472us/sample - loss: 0.1955 - accuracy: 0.9435 - val_loss: 0.0835 - val_accuracy: 0.9735
+Epoch 2/10
+60000/60000 [==============================] - 32s 533us/sample - loss: 0.0577 - accuracy: 0.9826 - val_loss: 0.0535 - val_accuracy: 0.9828
+Epoch 3/10
+60000/60000 [==============================] - 323s 5ms/sample - loss: 0.0334 - accuracy: 0.9897 - val_loss: 0.0566 - val_accuracy: 0.9828
+Epoch 4/10
+60000/60000 [==============================] - 20s 329us/sample - loss: 0.0218 - accuracy: 0.9933 - val_loss: 0.0495 - val_accuracy: 0.9851
+Epoch 5/10
+60000/60000 [==============================] - 19s 313us/sample - loss: 0.0129 - accuracy: 0.9961 - val_loss: 0.0570 - val_accuracy: 0.9830
+Epoch 6/10
+60000/60000 [==============================] - 19s 310us/sample - loss: 0.0102 - accuracy: 0.9968 - val_loss: 0.0523 - val_accuracy: 0.9841
+Epoch 7/10
+60000/60000 [==============================] - 18s 301us/sample - loss: 0.0061 - accuracy: 0.9983 - val_loss: 0.0578 - val_accuracy: 0.9845
+Epoch 8/10
+60000/60000 [==============================] - 18s 308us/sample - loss: 0.0043 - accuracy: 0.9989 - val_loss: 0.0597 - val_accuracy: 0.9853
+Epoch 9/10
+60000/60000 [==============================] - 18s 304us/sample - loss: 0.0060 - accuracy: 0.9981 - val_loss: 0.0748 - val_accuracy: 0.9818
+Epoch 10/10
+60000/60000 [==============================] - 18s 302us/sample - loss: 0.0055 - accuracy: 0.9981 - val_loss: 0.0743 - val_accuracy: 0.9826
+Out[33]: <tensorflow.python.keras.callbacks.History at 0x15fcfbcf160>
