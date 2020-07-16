@@ -1,0 +1,85 @@
+
+from keras.datasets import cifar10
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPool2D, Flatten
+from keras.utils import np_utils
+
+# loading the dataset
+(X_train, y_train), (X_test, y_test) = cifar10.load_data()
+Downloading data from https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz
+170500096/170498071 [==============================] - 21s 0us/step
+
+# # building the input vector from the 32x32 pixels
+X_train = X_train.reshape(X_train.shape[0], 32, 32, 3)
+X_test = X_test.reshape(X_test.shape[0], 32, 32, 3)
+X_train = X_train.astype('float32')
+X_test = X_test.astype('float32')
+
+# normalizing the data to help with the training
+X_train /= 255
+X_test /= 255
+
+# one-hot encoding using keras' numpy-related utilities
+n_classes = 10
+print("Shape before one-hot encoding: ", y_train.shape)
+Y_train = np_utils.to_categorical(y_train, n_classes)
+Y_test = np_utils.to_categorical(y_test, n_classes)
+print("Shape after one-hot encoding: ", Y_train.shape)
+Shape before one-hot encoding:  (50000, 1)
+Shape after one-hot encoding:  (50000, 10)
+
+# building a linear stack of layers with the sequential model
+model = Sequential()
+
+# convolutional layer
+model.add(Conv2D(50, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu', input_shape=(32, 32, 3)))
+
+# convolutional layer
+model.add(Conv2D(75, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu'))
+model.add(MaxPool2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Conv2D(125, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu'))
+model.add(MaxPool2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+# flatten output of conv
+model.add(Flatten())
+
+# hidden layer
+model.add(Dense(500, activation='relu'))
+model.add(Dropout(0.4))
+model.add(Dense(250, activation='relu'))
+model.add(Dropout(0.3))
+# output layer
+model.add(Dense(10, activation='softmax'))
+
+# compiling the sequential model
+model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
+
+# training the model for 10 epochs
+model.fit(X_train, Y_train, batch_size=128, epochs=10, validation_data=(X_test, Y_test))
+
+Train on 50000 samples, validate on 10000 samples
+Epoch 1/10
+50000/50000 [==============================] - 245s 5ms/sample - loss: 1.6063 - accuracy: 0.4109 - val_loss: 1.1839 - val_accuracy: 0.5865
+Epoch 2/10
+50000/50000 [==============================] - 289s 6ms/sample - loss: 1.1286 - accuracy: 0.6002 - val_loss: 0.9398 - val_accuracy: 0.6671
+Epoch 3/10
+50000/50000 [==============================] - 295s 6ms/sample - loss: 0.9477 - accuracy: 0.6655 - val_loss: 0.8696 - val_accuracy: 0.7027
+Epoch 4/10
+50000/50000 [==============================] - 301s 6ms/sample - loss: 0.8321 - accuracy: 0.7083 - val_loss: 0.7570 - val_accuracy: 0.7376
+Epoch 5/10
+50000/50000 [==============================] - 305s 6ms/sample - loss: 0.7435 - accuracy: 0.7422 - val_loss: 0.7486 - val_accuracy: 0.7373
+Epoch 6/10
+50000/50000 [==============================] - 297s 6ms/sample - loss: 0.6828 - accuracy: 0.7576 - val_loss: 0.6920 - val_accuracy: 0.7581
+Epoch 7/10
+50000/50000 [==============================] - 304s 6ms/sample - loss: 0.6273 - accuracy: 0.7802 - val_loss: 0.6736 - val_accuracy: 0.7695
+Epoch 8/10
+50000/50000 [==============================] - 305s 6ms/sample - loss: 0.5832 - accuracy: 0.7960 - val_loss: 0.6719 - val_accuracy: 0.7696
+Epoch 9/10
+50000/50000 [==============================] - 296s 6ms/sample - loss: 0.5459 - accuracy: 0.8073 - val_loss: 0.6607 - val_accuracy: 0.7769
+Epoch 10/10
+50000/50000 [==============================] - 304s 6ms/sample - loss: 0.4987 - accuracy: 0.8257 - val_loss: 0.6540 - val_accuracy: 0.7784
+Out[53]: <tensorflow.python.keras.callbacks.History at 0x15fdc03c828>
